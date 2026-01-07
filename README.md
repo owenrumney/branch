@@ -6,7 +6,7 @@ A CLI tool for creating git branches with consistent naming patterns. Never stru
 
 - 🎯 **Consistent naming**: Automatically formats branches as `<type>/<ticket>-<description>`
 - 🎫 **Smart ticket detection**: Recognizes common ticket formats (GitHub issues, Jira, Linear, etc.)
-- ⚙️ **Configurable**: Customize ticket patterns to match your workflow
+- ⚙️ **Fully configurable**: Customize both branch commands and ticket patterns to match your workflow
 - 🚀 **Fast**: Create and switch to branches in one command
 
 ## Installation
@@ -32,13 +32,15 @@ Make sure `$GOPATH/bin` or `$GOBIN` is in your `PATH`.
 
 ### Basic Commands
 
-The tool provides several subcommands for different branch types:
+By default, the tool provides several subcommands for different branch types:
 
 - `branch feat` - Create a feature branch
 - `branch fix` - Create a bugfix branch
 - `branch tests` - Create a tests branch
 - `branch chore` - Create a chore branch
 - `branch docs` - Create a documentation branch
+
+> **Note**: These commands are configurable! You can customize which branch types are available by editing your config file (see [Configuration](#configuration) below).
 
 ### Examples
 
@@ -89,7 +91,7 @@ Branches follow this pattern:
 <type>/<ticket>-<description>
 ```
 
-- **Type**: One of `feat`, `fix`, `tests`, `chore`, or `docs`
+- **Type**: A branch type command (defaults: `feat`, `fix`, `tests`, `chore`, `docs` - configurable)
 - **Ticket** (optional): Automatically detected if it matches a known pattern
 - **Description**: The rest of your input, converted to a URL-friendly slug
 
@@ -105,11 +107,42 @@ The tool recognizes these ticket formats by default:
 
 ### Custom Configuration
 
-You can customize ticket patterns by creating a config file at:
+You can customize both branch commands and ticket patterns by creating a config file at:
 - `$XDG_CONFIG_HOME/branch/config.json` (if `XDG_CONFIG_HOME` is set)
 - `~/.config/branch/config.json` (default)
 
-Example configuration:
+#### Customizing Branch Commands
+
+You can define your own branch type commands. For example, if you prefer `feature` instead of `feat`, or want to add custom types like `hotfix` or `release`:
+
+```json
+{
+  "branch_commands": [
+    "feature",
+    "bugfix",
+    "hotfix",
+    "release",
+    "chore"
+  ],
+  "ticket_patterns": [
+    "^#\\d+$",
+    "^[A-Z]+-\\d+$"
+  ]
+}
+```
+
+After updating your config, the new commands will be available:
+```bash
+branch feature PIP-1234 add new functionality
+# Creates: feature/pip-1234-add-new-functionality
+
+branch hotfix fix critical bug
+# Creates: hotfix/fix-critical-bug
+```
+
+#### Customizing Ticket Patterns
+
+You can also customize which ticket patterns are recognized:
 
 ```json
 {
@@ -122,6 +155,28 @@ Example configuration:
 ```
 
 The patterns are regular expressions. If you don't specify any patterns, the defaults will be used.
+
+#### Complete Example
+
+Here's a complete configuration example:
+
+```json
+{
+  "branch_commands": [
+    "feat",
+    "fix",
+    "tests",
+    "chore",
+    "docs",
+    "hotfix"
+  ],
+  "ticket_patterns": [
+    "^#\\d+$",
+    "^[A-Z]+-\\d+$",
+    "^CUSTOM-\\d+$"
+  ]
+}
+```
 
 ## Examples in Action
 

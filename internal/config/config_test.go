@@ -27,6 +27,22 @@ func TestDefault(t *testing.T) {
 		t.Errorf("Expected %d patterns, got %d", len(expectedPatterns), len(cfg.TicketPatterns))
 	}
 
+	// Test that default branch commands are present
+	expectedCommands := []string{"feat", "fix", "tests", "chore", "docs"}
+	if len(cfg.BranchCommands) != len(expectedCommands) {
+		t.Errorf("Expected %d branch commands, got %d", len(expectedCommands), len(cfg.BranchCommands))
+	}
+
+	for i, expected := range expectedCommands {
+		if i >= len(cfg.BranchCommands) {
+			t.Errorf("Missing branch command: %q", expected)
+			continue
+		}
+		if cfg.BranchCommands[i] != expected {
+			t.Errorf("BranchCommands[%d] = %q, want %q", i, cfg.BranchCommands[i], expected)
+		}
+	}
+
 	// Test that patterns are compiled
 	if len(cfg.compiled) == 0 {
 		t.Error("Default() should compile patterns")
@@ -111,6 +127,10 @@ func TestLoad(t *testing.T) {
   "ticket_patterns": [
     "^CUSTOM-\\d+$",
     "^#\\d+$"
+  ],
+  "branch_commands": [
+    "feat",
+    "fix"
   ]
 }`
 		if err := os.MkdirAll(configDir, 0755); err != nil {
@@ -141,6 +161,14 @@ func TestLoad(t *testing.T) {
 		}
 		if cfg.IsTicket("PIP-123") {
 			t.Error("PIP-123 should not match custom patterns")
+		}
+
+		// Test that custom branch commands are loaded
+		if len(cfg.BranchCommands) != 2 {
+			t.Errorf("Expected 2 branch commands, got %d", len(cfg.BranchCommands))
+		}
+		if cfg.BranchCommands[0] != "feat" || cfg.BranchCommands[1] != "fix" {
+			t.Errorf("Expected branch commands [feat, fix], got %v", cfg.BranchCommands)
 		}
 	})
 
@@ -209,6 +237,7 @@ func TestSave(t *testing.T) {
 
 	cfg := Default()
 	cfg.TicketPatterns = []string{`^TEST-\d+$`}
+	cfg.BranchCommands = []string{"custom", "command"}
 
 	if err := cfg.Save(); err != nil {
 		t.Fatalf("Save() should not error, got: %v", err)
@@ -231,6 +260,14 @@ func TestSave(t *testing.T) {
 
 	if loaded.TicketPatterns[0] != `^TEST-\d+$` {
 		t.Errorf("Expected pattern ^TEST-\\d+$, got %q", loaded.TicketPatterns[0])
+	}
+
+	// Verify branch commands are saved and loaded
+	if len(loaded.BranchCommands) != 2 {
+		t.Errorf("Expected 2 branch commands, got %d", len(loaded.BranchCommands))
+	}
+	if loaded.BranchCommands[0] != "custom" || loaded.BranchCommands[1] != "command" {
+		t.Errorf("Expected branch commands [custom, command], got %v", loaded.BranchCommands)
 	}
 }
 
