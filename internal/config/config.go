@@ -9,6 +9,7 @@ import (
 
 type Config struct {
 	TicketPatterns []string `json:"ticket_patterns"`
+	BranchCommands []string `json:"branch_commands"`
 	compiled       []*regexp.Regexp
 }
 
@@ -18,6 +19,13 @@ func Default() *Config {
 			`^#\d+$`,       // GitHub issues: #123
 			`^[A-Z]+-\d+$`, // Jira/Linear style: PIP-1234, INFRA-124
 			`^[A-Z]+_\d+$`, // Underscore variant: PIP_1234
+		},
+		BranchCommands: []string{
+			"feat",
+			"fix",
+			"tests",
+			"chore",
+			"docs",
 		},
 	}
 	cfg.compile()

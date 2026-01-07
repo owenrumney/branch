@@ -6,6 +6,7 @@ import (
 	"os/exec"
 
 	"github.com/owenrumney/branch/cmd"
+	"github.com/owenrumney/branch/internal/config"
 )
 
 func main() {
@@ -15,5 +16,15 @@ func main() {
 		os.Exit(1)
 	}
 
-	cmd.Execute()
+	cfg, err := config.Load()
+	if err != nil {
+		fmt.Println("Error loading config:", err)
+		os.Exit(1)
+	}
+
+	rootCmd := cmd.NewRootCmd(cfg)
+	if err := rootCmd.Execute(); err != nil {
+		fmt.Println("Error executing command:", err)
+		os.Exit(1)
+	}
 }

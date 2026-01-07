@@ -2,28 +2,25 @@ package cmd
 
 import (
 	"fmt"
-	"os"
 
+	"github.com/owenrumney/branch/internal/config"
 	"github.com/spf13/cobra"
 )
 
-var rootCmd = &cobra.Command{
-	Use:   "branch",
-	Short: "Create git branches with consistent naming patterns",
-	Long:  `A CLI tool for creating git branches using a standardized pattern: <type>/<ticket>-<description>`,
-}
+func NewRootCmd(cfg *config.Config) *cobra.Command {
 
-func Execute() {
-	if err := rootCmd.Execute(); err != nil {
-		fmt.Fprintln(os.Stderr, err)
-		os.Exit(1)
+	rootCmd := &cobra.Command{
+		Use:   "branch",
+		Short: "Create git branches with consistent naming patterns",
+		Long:  `A CLI tool for creating git branches using a standardized pattern: <type>/<ticket>-<description>`,
 	}
-}
 
-func init() {
-	rootCmd.AddCommand(newBranchCmd("feat", "Create a feature branch"))
-	rootCmd.AddCommand(newBranchCmd("fix", "Create a bugfix branch"))
-	rootCmd.AddCommand(newBranchCmd("tests", "Create a tests branch"))
-	rootCmd.AddCommand(newBranchCmd("chore", "Create a chore branch"))
-	rootCmd.AddCommand(newBranchCmd("docs", "Create a documentation branch"))
+	for _, branchCommand := range cfg.BranchCommands {
+		rootCmd.AddCommand(newBranchCmd(branchCommand, fmt.Sprintf("Create a %s branch", branchCommand)))
+	}
+
+	// don't need completions so lets remove that from the help output
+	rootCmd.CompletionOptions.HiddenDefaultCmd = true
+
+	return rootCmd
 }
