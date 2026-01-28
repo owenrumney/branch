@@ -1,13 +1,13 @@
-# branch
+# Branch
 
 A CLI tool for creating git branches with consistent naming patterns. Never struggle with branch naming conventions again!
 
 ## Features
 
-- 🎯 **Consistent naming**: Automatically formats branches as `<type>/<ticket>-<description>`
-- 🎫 **Smart ticket detection**: Recognizes common ticket formats (GitHub issues, Jira, Linear, etc.)
-- ⚙️ **Fully configurable**: Customize both branch commands and ticket patterns to match your workflow
-- 🚀 **Fast**: Create and switch to branches in one command
+- **Consistent naming**: Automatically formats branches as `<type>/<ticket>-<description>`
+- **Smart ticket detection**: Recognizes common ticket formats (GitHub issues, Jira, Linear, etc.)
+- **Fully configurable**: Customize both branch commands and ticket patterns to match your workflow
+- **Fast**: Create and switch to branches in one command
 
 ## Installation
 

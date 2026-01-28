@@ -9,6 +9,12 @@ import (
 	"github.com/owenrumney/branch/internal/config"
 )
 
+var (
+	version = "dev"
+	commit  = "none"
+	date    = "unknown"
+)
+
 func main() {
 	// ensure that git is available on the PATH
 	if _, err := exec.LookPath("git"); err != nil {
@@ -22,7 +28,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	rootCmd := cmd.NewRootCmd(cfg)
+	rootCmd := cmd.NewRootCmd(cfg, fmt.Sprintf("%s (%s) built on %s", version, commit, date))
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println("Error executing command:", err)
 		os.Exit(1)

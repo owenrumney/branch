@@ -20,7 +20,7 @@ func TestNewRootCmd(t *testing.T) {
 
 	t.Run("creates commands from default config", func(t *testing.T) {
 		cfg := config.Default()
-		rootCmd := NewRootCmd(cfg)
+		rootCmd := NewRootCmd(cfg, "test")
 
 		if rootCmd == nil {
 			t.Fatal("NewRootCmd() should not return nil")
@@ -40,7 +40,7 @@ func TestNewRootCmd(t *testing.T) {
 			BranchCommands: []string{"custom1", "custom2", "custom3"},
 		}
 
-		rootCmd := NewRootCmd(cfg)
+		rootCmd := NewRootCmd(cfg, "test")
 
 		if rootCmd == nil {
 			t.Fatal("NewRootCmd() should not return nil")
@@ -57,7 +57,7 @@ func TestNewRootCmd(t *testing.T) {
 
 	t.Run("hides completion command", func(t *testing.T) {
 		cfg := config.Default()
-		rootCmd := NewRootCmd(cfg)
+		rootCmd := NewRootCmd(cfg, "test")
 
 		if !rootCmd.CompletionOptions.HiddenDefaultCmd {
 			t.Error("Completion command should be hidden")
@@ -66,7 +66,7 @@ func TestNewRootCmd(t *testing.T) {
 
 	t.Run("root command has correct metadata", func(t *testing.T) {
 		cfg := config.Default()
-		rootCmd := NewRootCmd(cfg)
+		rootCmd := NewRootCmd(cfg, "test")
 
 		if rootCmd.Use != "branch" {
 			t.Errorf("Expected Use to be 'branch', got %q", rootCmd.Use)
@@ -84,7 +84,7 @@ func TestNewRootCmd(t *testing.T) {
 
 func TestNewRootCmdCommandStructure(t *testing.T) {
 	cfg := config.Default()
-	rootCmd := NewRootCmd(cfg)
+	rootCmd := NewRootCmd(cfg, "test")
 
 	// Helper to find command by name
 	findCommand := func(name string) *cobra.Command {

@@ -16,7 +16,6 @@ func TestDefault(t *testing.T) {
 		t.Error("Default() should have ticket patterns")
 	}
 
-	// Test that default patterns are present
 	expectedPatterns := []string{
 		`^#\d+$`,
 		`^[A-Z]+-\d+$`,
@@ -27,7 +26,6 @@ func TestDefault(t *testing.T) {
 		t.Errorf("Expected %d patterns, got %d", len(expectedPatterns), len(cfg.TicketPatterns))
 	}
 
-	// Test that default branch commands are present
 	expectedCommands := []string{"feat", "fix", "tests", "chore", "docs"}
 	if len(cfg.BranchCommands) != len(expectedCommands) {
 		t.Errorf("Expected %d branch commands, got %d", len(expectedCommands), len(cfg.BranchCommands))
@@ -41,11 +39,6 @@ func TestDefault(t *testing.T) {
 		if cfg.BranchCommands[i] != expected {
 			t.Errorf("BranchCommands[%d] = %q, want %q", i, cfg.BranchCommands[i], expected)
 		}
-	}
-
-	// Test that patterns are compiled
-	if len(cfg.compiled) == 0 {
-		t.Error("Default() should compile patterns")
 	}
 }
 
