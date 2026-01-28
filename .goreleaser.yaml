@@ -48,13 +48,14 @@ changelog:
       - Merge pull request
       - Merge branch
 
-brews:
-  - repository:
-      owner: owenrumney
-      name: homebrew-tools
-    directory: Formula
+homebrew_casks:
+  - name: branch
     homepage: https://github.com/owenrumney/branch
     description: A CLI tool for creating git branches with consistent naming patterns
-    license: UNLICENSED
-    test: |
-      system "#{bin}/branch --help"
+    binaries:
+      - branch
+    repository:
+      owner: owenrumney
+      name: homebrew-tools
+      branch: main
+      token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
