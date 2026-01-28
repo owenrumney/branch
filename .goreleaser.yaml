@@ -21,7 +21,7 @@ builds:
       - -s -w -X main.version={{.Version}} -X main.commit={{.Commit}} -X main.date={{.Date}}
 
 archives:
-  - format: tar.gz
+  - format: ['tar.gz']
     name_template: >-
       {{ .ProjectName }}_
       {{- title .Os }}_
@@ -30,7 +30,7 @@ archives:
       {{- else }}{{ .Arch }}{{ end }}
     format_overrides:
       - goos: windows
-        format: zip
+        format: [ 'zip ']
 
 checksum:
   name_template: 'checksums.txt'
@@ -48,13 +48,22 @@ changelog:
       - Merge pull request
       - Merge branch
 
-brews:
-  - repository:
-      owner: owenrumney
-      name: homebrew-tools
-    directory: Formula
+homebrew_casks:
+  - name: branch
     homepage: https://github.com/owenrumney/branch
     description: A CLI tool for creating git branches with consistent naming patterns
-    license: UNLICENSED
-    test: |
-      system "#{bin}/branch --help"
+    binaries:
+      - branch
+
+    hooks:
+      post:
+        install: |
+          # Remove quarantine attribute to avoid Gatekeeper issues
+          system_command "/usr/bin/xattr",
+                         args: ["-cr", staged_path.to_s],
+                         sudo: false
+    repository:
+      owner: owenrumney
+      name: homebrew-tools
+      branch: main
+      token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
