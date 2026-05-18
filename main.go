@@ -28,6 +28,18 @@ func main() {
 		os.Exit(1)
 	}
 
+	if len(os.Args) > 1 && os.Args[1] == "version" {
+		fmt.Printf("branch version %s (commit %s built on %s)\n", version, commit, date)
+		return
+	}
+
+	if len(os.Args) > 1 && os.Args[1] == "generate-config" {
+		if err := cfg.Save(); err != nil {
+			fmt.Printf("Error saving config: %v\n", err)
+		}
+		return
+	}
+
 	rootCmd := cmd.NewRootCmd(cfg, fmt.Sprintf("%s (%s) built on %s", version, commit, date))
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println("Error executing command:", err)

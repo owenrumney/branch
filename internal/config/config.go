@@ -26,6 +26,7 @@ func Default() *Config {
 			"tests",
 			"chore",
 			"docs",
+			"refactor",
 		},
 	}
 	cfg.compile()
@@ -66,7 +67,7 @@ func (c *Config) Save() error {
 		return err
 	}
 
-	if err := os.MkdirAll(filepath.Dir(configPath), 0755); err != nil {
+	if err := os.MkdirAll(filepath.Dir(configPath), 0o755); err != nil {
 		return err
 	}
 
@@ -75,7 +76,7 @@ func (c *Config) Save() error {
 		return err
 	}
 
-	return os.WriteFile(configPath, data, 0644)
+	return os.WriteFile(configPath, data, 0o644)
 }
 
 func (c *Config) IsTicket(s string) bool {
