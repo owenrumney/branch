@@ -26,7 +26,7 @@ func TestDefault(t *testing.T) {
 		t.Errorf("Expected %d patterns, got %d", len(expectedPatterns), len(cfg.TicketPatterns))
 	}
 
-	expectedCommands := []string{"feat", "fix", "tests", "chore", "docs"}
+	expectedCommands := []string{"feat", "fix", "tests", "chore", "docs", "refactor"}
 	if len(cfg.BranchCommands) != len(expectedCommands) {
 		t.Errorf("Expected %d branch commands, got %d", len(expectedCommands), len(cfg.BranchCommands))
 	}
